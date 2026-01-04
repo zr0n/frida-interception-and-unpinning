@@ -41,6 +41,7 @@ The scripts can automatically handle:
         -l ./android/android-certificate-unpinning.js \
         -l ./android/android-certificate-unpinning-fallback.js \
         -l ./android/android-disable-root-detection.js \
+        -l device-spoof.js \
         -f $PACKAGE_ID
     ```
 7. Explore, examine & modify all the traffic you're interested in! If you have any problems, please [open an issue](https://github.com/httptoolkit/frida-interception-and-unpinning/issues/new) and help make these scripts even better.
