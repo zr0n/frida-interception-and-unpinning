@@ -20,9 +20,9 @@
  */
 
 Java.perform(function() {
-    console.log("\n╔════════════════════════════════════════════════╗");
-    console.log("║   FRIDA DEVICE FINGERPRINT SPOOFING ATIVO     ║");
-    console.log("╚════════════════════════════════════════════════╝\n");
+    //console.log("\n╔════════════════════════════════════════════════╗");
+    //console.log("║   FRIDA DEVICE FINGERPRINT SPOOFING ATIVO     ║");
+    //console.log("╚════════════════════════════════════════════════╝\n");
 
     // ============================================
     // CONFIGURAÇÃO
@@ -49,14 +49,14 @@ Java.perform(function() {
         board: "universal9820"
     };
 
-    console.log("📱 Valores Fake Gerados:");
-    console.log("   Android ID:", FAKE_VALUES.androidId);
-    console.log("   IMEI:", FAKE_VALUES.imei);
-    console.log("   Serial:", FAKE_VALUES.serial);
-    console.log("   MAC:", FAKE_VALUES.macAddress);
-    console.log("   Advertising ID:", FAKE_VALUES.advertisingId);
-    console.log("   Model:", FAKE_VALUES.model);
-    console.log("");
+    //console.log("📱 Valores Fake Gerados:");
+    //console.log("   Android ID:", FAKE_VALUES.androidId);
+    //console.log("   IMEI:", FAKE_VALUES.imei);
+    //console.log("   Serial:", FAKE_VALUES.serial);
+    //console.log("   MAC:", FAKE_VALUES.macAddress);
+    //console.log("   Advertising ID:", FAKE_VALUES.advertisingId);
+    //console.log("   Model:", FAKE_VALUES.model);
+    //console.log("");
 
     // ============================================
     // 1. ANDROID ID SPOOFING
@@ -66,14 +66,14 @@ Java.perform(function() {
         const Settings = Java.use('android.provider.Settings$Secure');
         Settings.getString.overload('android.content.ContentResolver', 'java.lang.String').implementation = function(resolver, name) {
             if (name === "android_id") {
-                if (VERBOSE) console.log("[✓] Android ID interceptado → retornando fake:", FAKE_VALUES.androidId);
+                if (VERBOSE) //console.log("[✓] Android ID interceptado → retornando fake:", FAKE_VALUES.androidId);
                 return FAKE_VALUES.androidId;
             }
             return this.getString(resolver, name);
         };
-        console.log("✅ Android ID hooking ativo");
+        //console.log("✅ Android ID hooking ativo");
     } catch (e) {
-        console.log("❌ Erro no Android ID hook:", e.message);
+        //console.log("❌ Erro no Android ID hook:", e.message);
     }
 
     // ============================================
@@ -85,44 +85,44 @@ Java.perform(function() {
         
         // getDeviceId
         TelephonyManager.getDeviceId.overload().implementation = function() {
-            console.log("[✓] getDeviceId() interceptado → retornando IMEI fake");
+            //console.log("[✓] getDeviceId() interceptado → retornando IMEI fake");
             return FAKE_VALUES.imei;
         };
         
         // getImei
         if (TelephonyManager.getImei) {
             TelephonyManager.getImei.overload().implementation = function() {
-                console.log("[✓] getImei() interceptado → retornando IMEI fake");
+                //console.log("[✓] getImei() interceptado → retornando IMEI fake");
                 return FAKE_VALUES.imei;
             };
             
             TelephonyManager.getImei.overload('int').implementation = function(slotIndex) {
-                console.log("[✓] getImei(slot) interceptado → retornando IMEI fake");
+                //console.log("[✓] getImei(slot) interceptado → retornando IMEI fake");
                 return FAKE_VALUES.imei;
             };
         }
         
         // getSubscriberId (IMSI)
         TelephonyManager.getSubscriberId.overload().implementation = function() {
-            console.log("[✓] getSubscriberId() interceptado → retornando IMSI fake");
+            //console.log("[✓] getSubscriberId() interceptado → retornando IMSI fake");
             return FAKE_VALUES.simSerial;
         };
         
         // getLine1Number (Phone number)
         TelephonyManager.getLine1Number.overload().implementation = function() {
-            console.log("[✓] getLine1Number() interceptado → retornando número fake");
+            //console.log("[✓] getLine1Number() interceptado → retornando número fake");
             return FAKE_VALUES.phoneNumber;
         };
         
         // getSimSerialNumber
         TelephonyManager.getSimSerialNumber.overload().implementation = function() {
-            console.log("[✓] getSimSerialNumber() interceptado → retornando SIM fake");
+            //console.log("[✓] getSimSerialNumber() interceptado → retornando SIM fake");
             return FAKE_VALUES.simSerial;
         };
         
-        console.log("✅ Telephony Manager hooking ativo");
+        //console.log("✅ Telephony Manager hooking ativo");
     } catch (e) {
-        console.log("❌ Erro no TelephonyManager hook:", e);
+        //console.log("❌ Erro no TelephonyManager hook:", e);
     }
 
     // ============================================
@@ -132,16 +132,16 @@ Java.perform(function() {
     try {
         const Build = Java.use('android.os.Build');
         Build.getSerial.implementation = function() {
-            console.log("[✓] Build.getSerial() interceptado → retornando serial fake");
+            //console.log("[✓] Build.getSerial() interceptado → retornando serial fake");
             return FAKE_VALUES.serial;
         };
         
         // Build.SERIAL (field)
         Build.SERIAL.value = FAKE_VALUES.serial;
         
-        console.log("✅ Serial Number hooking ativo");
+        //console.log("✅ Serial Number hooking ativo");
     } catch (e) {
-        console.log("❌ Erro no Serial hook:", e);
+        //console.log("❌ Erro no Serial hook:", e);
     }
 
     // ============================================
@@ -152,18 +152,18 @@ Java.perform(function() {
         const WifiInfo = Java.use('android.net.wifi.WifiInfo');
         
         WifiInfo.getMacAddress.implementation = function() {
-            console.log("[✓] getMacAddress() interceptado → retornando MAC fake");
+            //console.log("[✓] getMacAddress() interceptado → retornando MAC fake");
             return FAKE_VALUES.macAddress;
         };
         
         WifiInfo.getBSSID.implementation = function() {
-            console.log("[✓] getBSSID() interceptado → retornando BSSID fake");
+            //console.log("[✓] getBSSID() interceptado → retornando BSSID fake");
             return FAKE_VALUES.macAddress;
         };
         
-        console.log("✅ MAC Address hooking ativo");
+        //console.log("✅ MAC Address hooking ativo");
     } catch (e) {
-        console.log("❌ Erro no MAC hook:", e);
+        //console.log("❌ Erro no MAC hook:", e);
     }
 
     // ============================================
@@ -175,14 +175,14 @@ Java.perform(function() {
         const Info = Java.use('com.google.android.gms.ads.identifier.AdvertisingIdClient$Info');
         
         AdvertisingIdClient.getAdvertisingIdInfo.implementation = function(context) {
-            console.log("[✓] getAdvertisingIdInfo() interceptado → retornando Ad ID fake");
+            //console.log("[✓] getAdvertisingIdInfo() interceptado → retornando Ad ID fake");
             
             return Info.$new(FAKE_VALUES.advertisingId, false);
         };
         
-        console.log("✅ Advertising ID hooking ativo");
+        //console.log("✅ Advertising ID hooking ativo");
     } catch (e) {
-        console.log("⚠️  Advertising ID hook não aplicado (normal se app não usa):", e.message);
+        //console.log("⚠️  Advertising ID hook não aplicado (normal se app não usa):", e.message);
     }
 
     // ============================================
@@ -200,9 +200,9 @@ Java.perform(function() {
         Build.HARDWARE.value = FAKE_VALUES.hardware;
         Build.BOARD.value = FAKE_VALUES.board;
         
-        console.log("✅ Build Properties hooking ativo");
+        //console.log("✅ Build Properties hooking ativo");
     } catch (e) {
-        console.log("❌ Erro no Build Properties hook:", e);
+        //console.log("❌ Erro no Build Properties hook:", e);
     }
 
     // ============================================
@@ -215,7 +215,7 @@ Java.perform(function() {
         MediaDrm.getPropertyByteArray.implementation = function(property) {
             try {
                 if (property === "deviceUniqueId") {
-                    if (VERBOSE) console.log("[✓] MediaDRM deviceUniqueId interceptado → retornando ID fake");
+                    //if (VERBOSE) //console.log("[✓] MediaDRM deviceUniqueId interceptado → retornando ID fake");
                     
                     // Converte hex para byte array JAVA corretamente
                     const hexString = FAKE_VALUES.mediaDrmId;
@@ -236,14 +236,14 @@ Java.perform(function() {
                 
             } catch (e) {
                 // Se der erro, chama o método original
-                console.log("⚠️  MediaDRM erro interno (ignorando):", e.message);
+                //console.log("⚠️  MediaDRM erro interno (ignorando):", e.message);
                 return this.getPropertyByteArray(property);
             }
         };
         
-        console.log("✅ MediaDRM ID hooking ativo");
+        //console.log("✅ MediaDRM ID hooking ativo");
     } catch (e) {
-        console.log("⚠️  MediaDRM hook não aplicado:", e.message);
+        //console.log("⚠️  MediaDRM hook não aplicado:", e.message);
     }
 
     // ============================================
@@ -255,13 +255,13 @@ Java.perform(function() {
         
         FirebaseInstanceId.getId.implementation = function() {
             const fakeId = generateRandomHex(32);
-            console.log("[✓] Firebase Instance ID interceptado → retornando ID fake");
+            //console.log("[✓] Firebase Instance ID interceptado → retornando ID fake");
             return fakeId;
         };
         
-        console.log("✅ Firebase Instance ID hooking ativo");
+        //console.log("✅ Firebase Instance ID hooking ativo");
     } catch (e) {
-        console.log("⚠️  Firebase hook não aplicado (normal se app não usa):", e.message);
+        //console.log("⚠️  Firebase hook não aplicado (normal se app não usa):", e.message);
     }
 
     // ============================================
@@ -272,13 +272,13 @@ Java.perform(function() {
         const BluetoothAdapter = Java.use('android.bluetooth.BluetoothAdapter');
         
         BluetoothAdapter.getAddress.implementation = function() {
-            console.log("[✓] Bluetooth Address interceptado → retornando MAC fake");
+            //console.log("[✓] Bluetooth Address interceptado → retornando MAC fake");
             return FAKE_VALUES.macAddress;
         };
         
-        console.log("✅ Bluetooth MAC hooking ativo");
+        //console.log("✅ Bluetooth MAC hooking ativo");
     } catch (e) {
-        console.log("⚠️  Bluetooth hook não aplicado:", e.message);
+        //console.log("⚠️  Bluetooth hook não aplicado:", e.message);
     }
 
     // ============================================
@@ -341,7 +341,7 @@ Java.perform(function() {
                Math.floor(1000000000 + Math.random() * 9000000000);
     }
 
-    console.log("\n✅ Todos os hooks ativos!");
-    console.log("⚠️  LEMBRE-SE: Apps modernos usam múltiplas camadas de detecção");
-    console.log("   (IP, GPS, padrões de uso, device fingerprinting avançado)\n");
+    //console.log("\n✅ Todos os hooks ativos!");
+    //console.log("⚠️  LEMBRE-SE: Apps modernos usam múltiplas camadas de detecção");
+    //console.log("   (IP, GPS, padrões de uso, device fingerprinting avançado)\n");
 });
